@@ -78,8 +78,6 @@ var Xero = {
       var secretMatch = reTokenSecret.exec(response.getContentText())  ;
       var tokenSecret = secretMatch[2];
       PropertiesService.getScriptProperties().setProperty('requestTokenSecret', tokenSecret);      
-      //Logger.log('Request Token = ' + oAuthRequestToken);
-      //Logger.log('Request Token Secret = ' + tokenSecret);
       
       return authorizeURL + '?oauth_token=' + oAuthRequestToken;
       
