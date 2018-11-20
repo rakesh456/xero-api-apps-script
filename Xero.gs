@@ -165,9 +165,7 @@ var Xero = {
     var oauth_signature_method = 'HMAC-SHA1';
     var oauth_timestamp =  (new Date().getTime()/1000).toFixed();
     var oauth_nonce = generateRandomString(Math.floor(Math.random() * 50));
-    var oauth_version = '1.0';  
-    //oauth_consumer_key=SRPZNHSGTI5L1WAQJGBTZROYVH3IZ3&oauth_nonce=GuWaMcBr3Bq&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1404572819
-    //&oauth_token=NVOXINVPTRTJHZOGMBHEDRUXJ6MPIN&oauth_version=1.0&page=1
+    var oauth_version = '1.0';      
     var signBase = 'GET' + '&' + encodeURIComponent(requestURL) + '&' 
     + encodeURIComponent('oauth_consumer_key=' + this.consumerKey + '&oauth_nonce=' + oauth_nonce + '&oauth_signature_method=' + oauth_signature_method 
                          + '&oauth_timestamp=' + oauth_timestamp + '&oauth_token=' + this.accessToken  + '&oauth_version=' + oauth_version + '&page=' + pageNo);  
