@@ -77,8 +77,7 @@ var Xero = {
       var reTokenSecret = /(oauth_token_secret=)([a-zA-Z0-9]+)/;
       var secretMatch = reTokenSecret.exec(response.getContentText())  ;
       var tokenSecret = secretMatch[2];
-      PropertiesService.getScriptProperties().setProperty('requestTokenSecret', tokenSecret);      
-      
+      PropertiesService.getScriptProperties().setProperty('requestTokenSecret', tokenSecret);     
       return authorizeURL + '?oauth_token=' + oAuthRequestToken;
       
       // Step 2 Show user the link to connect to Xero       
@@ -127,7 +126,7 @@ var Xero = {
     var headers = { "User-Agent": this.userAgent, "Authorization": authHeader, "Accept": "application/json"};    
     var options = { muteHttpExceptions: true, "headers": headers}; 
     var response = UrlFetchApp.fetch(requestURL + '?page=' + pageNo, options);
-    Logger.log(response);
+    
     if (response.getResponseCode() == 200)
       return JSON.parse(response.getContentText());    
     else
@@ -169,13 +168,9 @@ var Xero = {
     var signBase = 'GET' + '&' + encodeURIComponent(requestURL) + '&' 
     + encodeURIComponent('oauth_consumer_key=' + this.consumerKey + '&oauth_nonce=' + oauth_nonce + '&oauth_signature_method=' + oauth_signature_method 
                          + '&oauth_timestamp=' + oauth_timestamp + '&oauth_token=' + this.accessToken  + '&oauth_version=' + oauth_version + '&page=' + pageNo);  
-    Logger.log(signBase);
     var sbSigned = Utilities.computeHmacSignature(Utilities.MacAlgorithm.HMAC_SHA_1, signBase, 
                                                   encodeURIComponent(this.consumerSecret) + '&' + encodeURIComponent(this.accessTokenSecret));        
-    Logger.log('sbSigned: ' + sbSigned);    
-    //var oauth_signature = hex2b64(sbSigned);  
     var oauth_signature = Utilities.base64Encode(sbSigned);
-    Logger.log(oauth_signature);
     
     var authHeader = "OAuth oauth_consumer_key=\"" + this.consumerKey + "\",oauth_nonce=\"" + oauth_nonce + "\",oauth_token=\"" + this.accessToken 
     + "\",oauth_signature_method=\"" + oauth_signature_method +"\",oauth_timestamp=\"" + oauth_timestamp + "\",oauth_version=\"1.0\",oauth_signature=\""
@@ -188,11 +183,11 @@ var Xero = {
       return JSON.parse(response.getContentText());  
     }
     catch(e) {
-      //Logger.log(response.getContentText());
       Logger.log(e.message);
       Browser.msgBox(e.message);
     } 
   },
+  
   fetchPartnerAppData: function(item) {
     return false;
   },
@@ -211,11 +206,9 @@ var Xero = {
     if (method == 'POST')
       signBase += '&xml=' + xml;
     
-    
     var rsa = new RSAKey();
     rsa.readPrivateKeyFromPEMString(this.rsaKey);
     var sbSigned = rsa.signString(signBase, 'sha1');
-    Logger.log(sbSigned);
     
     var data = new Array();
     for (var i =0; i < sbSigned.length; i += 2) 
@@ -238,7 +231,6 @@ var Xero = {
     catch(e) {
       throw e.message;
     }
-    Logger.log(response.getContentText());    // return XML
     return false;
   }  
 }
