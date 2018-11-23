@@ -4,7 +4,7 @@ Integrating Xero.com REST API with Google Apps Script
 How to use this Script
 1. Create a new Google Spreadsheet.
 2. From Spreadsheet menu go to Tools >> Script Editor.
-3. In the Script, copy and add following files from rsa folder. Add new script file for each of the following:
+3. In the Script, copy and add following files. Add new script file for each of the following:
 a) rsa/jsbn.gs
 b) rsa/jsbn2.gs
 c) rsa/rsa.gs
