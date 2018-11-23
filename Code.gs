@@ -24,7 +24,6 @@ function doGet(e) {
   // Step 3. Exchange verified Request token for Access Token
   // var p = PropertiesService.getScriptProperties().getProperties();
   Xero.getSettings();
-  Logger.log('doGet: Xero.getProperty[consumerKey]' + Xero.getProperty('consumerKey'));
   var payload = 
       {
         "oauth_consumer_key": Xero.getProperty('consumerKey'),
@@ -40,7 +39,6 @@ function doGet(e) {
   try {
     var response = UrlFetchApp.fetch(accessTokenURL, options);
   }catch(e) {
-    Logger.log('UrlFetchApp.fetch(accessTokenURL, options).response = ' + response.getContentText());
     Logger.log(e);
     return HtmlService.createHtmlOutput("<html><div>"+ response.getContentText() +"</div></html>");  
   }  
@@ -149,7 +147,6 @@ function xeroSetup() {
 
 function saveSettings(e){
   var ss = SpreadsheetApp.getActiveSpreadsheet();  
-  //var app = UiApp.getActiveApplication();
   var app = UiApp.getActiveApplication();
   // we have the settings in e.parameter  
   var sProps = PropertiesService.getScriptProperties();    
@@ -164,7 +161,6 @@ function saveSettings(e){
     app.remove(app.getElementById('label1')); 
     app.remove(app.getElementById('panel1'));          
     app.setHeight(50);app.setWidth(100);            
-    Logger.log(Xero.connect());
     var link = app.createAnchor('Connect to Xero', true, Xero.connect());
     var handler = app.createServerHandler('closeApp');
     link.addClickHandler(handler);
@@ -176,7 +172,6 @@ function saveSettings(e){
 }
 
 // Download Functions
-
 function downloadInvoices() {
   downloadOptions('Invoices');
 }
@@ -395,7 +390,6 @@ function handlePaymentsDownload(){
 
 
 // Upload Functions
-
 function uploadInvoices(){
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet   = ss.getSheetByName("Invoices Upload");
@@ -426,8 +420,7 @@ function uploadInvoices(){
   if (sheet.getLastRow() <= 1 || l_sheet.getLastRow() <= 1) {
     Browser.msgBox('Error: No data to upload');
     return false;
-  }  
-  
+  }    
   
   var l_lrow = l_sheet.getDataRange().getLastRow();
   var l_data = l_sheet.getDataRange().getValues();
@@ -457,24 +450,20 @@ function uploadInvoices(){
     var total                = data[i][15];
 
     payload += "<Invoice>";
-
     payload += "<InvoiceNumber>" + inv_number + "</InvoiceNumber>";
     payload += "<Type>" + inv_type + "</Type>";
-
     payload += "<Contact>";
     payload += "<Name>" + contact_name + "</Name>";
     payload += "<ContactNumber>" + contact_number + "</ContactNumber>";
     payload += "</Contact>";
  
     // Removed the Address related fields in Contact. Add them as required
-
     payload += "<Date>" + Utilities.formatDate(issue_date, "GMT", "yyyy-MM-dd") + "</Date>";
     payload += "<DueDate>" + Utilities.formatDate(due_date, "GMT", "yyyy-MM-dd") + "</DueDate>";
     payload += "<LineAmountTypes>" + line_amount_types + "</LineAmountTypes>";
     if(inv_type == "ACCREC"){
       payload += "<Reference>" + reference + "</Reference>";
     }
-   // payload += "<BrandingThemeID>" + bid + "</BrandingThemeID>";
     payload += "<Url>" + url + "</Url>";
     payload += "<CurrencyCode>" + currency_code + "</CurrencyCode>";
     payload += "<Status>" + status + "</Status>";
@@ -488,7 +477,6 @@ function uploadInvoices(){
       var l_inv_number = l_data[j][0];
       if(l_inv_number != undefined && l_inv_number != null && l_inv_number != "" && l_inv_number == inv_number){
         payload += "<LineItem>";
-        
         
         var l_desc        = l_data[j][1];
         var l_quantity    = l_data[j][2];
@@ -507,11 +495,9 @@ function uploadInvoices(){
         payload += "<LineAmount>" + l_lineamount + "</LineAmount>";
         payload += "<AccountCode>" + l_accountcode + "</AccountCode>";
         payload += "<Region>" + l_region + "</Region>";
-
-
+        
         payload += "</LineItem>";
-      }
-      
+      }      
     }
     payload += "</LineItems>";
     payload += "</Invoice>";
